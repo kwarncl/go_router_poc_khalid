@@ -1,4 +1,7 @@
+import 'package:feature1/feature1.dart';
+import 'package:feature2/feature2.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'router.dart';
 
@@ -13,11 +16,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Go Router Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
       routerConfig: router,
     );
   }
 }
+
+final router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const HomeScreen(),
+    ),
+    ...feature1Routes,
+    ...feature2Routes,
+  ],
+);

@@ -41,9 +41,9 @@ dependencies:
 
   # Local feature packages
   feature1:
-    path: features/feature1
+    path: packages/feature1
   feature2:
-    path: features/feature2
+    path: packages/feature2
 
 dev_dependencies:
   flutter_test:

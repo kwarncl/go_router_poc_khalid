@@ -60,14 +60,14 @@ packages:
   feature1:
     dependency: "direct main"
     description:
-      path: "features/feature1"
+      path: "packages/feature1"
       relative: true
     source: path
     version: "0.0.1"
   feature2:
     dependency: "direct main"
     description:
-      path: "features/feature2"
+      path: "packages/feature2"
       relative: true
     source: path
     version: "0.0.1"

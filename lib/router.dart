@@ -1,18 +1,5 @@
-import 'package:feature1/feature1.dart';
-import 'package:feature2/feature2.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-final router = GoRouter(
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const HomeScreen(),
-    ),
-    ...feature1Routes,
-    ...feature2Routes,
-  ],
-);
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,12 +15,12 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () => context.go('/feature1'),
+              onPressed: () => context.push('/feature1'),
               child: const Text('Go to Feature 1'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => context.go('/feature2'),
+              onPressed: () => context.push('/feature2'),
               child: const Text('Go to Feature 2'),
             ),
           ],

@@ -8,6 +8,7 @@ class Feature2Screen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Feature 2'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: const Center(
         child: Text('Welcome to Feature 2'),
