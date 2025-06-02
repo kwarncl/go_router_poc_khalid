@@ -1,5 +1,5 @@
-name: feature1
-description: Feature 1 package for GoRouter POC
+name: cart
+description: Cart package for GoRouter POC
 version: 0.0.1
 
 environment:

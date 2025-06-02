@@ -1,9 +1,5 @@
-import 'package:feature1/feature1.dart';
-import 'package:feature2/feature2.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
-import 'home_screen.dart';
+import 'package:go_router_poc_khalid/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,16 +16,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-final router = GoRouter(
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const HomeScreen(),
-      routes: [
-        ...feature1Routes,
-        ...feature2Routes,
-      ],
-    ),
-  ],
-);

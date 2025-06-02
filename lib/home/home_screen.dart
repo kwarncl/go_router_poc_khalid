@@ -1,3 +1,4 @@
+import 'package:cart/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,22 +15,26 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Feature 1',
+            'Shopping Cart',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           ListTile(
-            title: const Text('Feature 1 package'),
-            subtitle: const Text('Navigate to Feature 1'),
-            trailing: const Icon(Icons.arrow_forward),
-            onTap: () => context.go('/feature1'),
+            title: const Text('View Cart'),
+            subtitle: const Text('Go to cart items list'),
+            trailing: const Icon(Icons.shopping_cart),
+            onTap: () => context.go(CartRoute.cartList.path),
           ),
           ListTile(
-            title: const Text('Feature 1, item 7'),
-            subtitle: const Text(
-              'Navigate to item 7 in Feature 1 and preserve route',
-            ),
+            title: const Text('View Item 1'),
+            subtitle: const Text('Go directly to item 1 details'),
             trailing: const Icon(Icons.arrow_forward),
-            onTap: () => context.go('/feature1/item/7'),
+            onTap: () => context.go(CartRoute.cartDetail.location({'id': '1'})),
+          ),
+          ListTile(
+            title: const Text('View Item 2'),
+            subtitle: const Text('Go directly to item 2 details'),
+            trailing: const Icon(Icons.arrow_forward),
+            onTap: () => context.go(CartRoute.cartDetail.location({'id': '2'})),
           ),
           const SizedBox(height: 50),
           TextButton(

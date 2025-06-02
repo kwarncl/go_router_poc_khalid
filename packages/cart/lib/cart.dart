@@ -1,3 +1,3 @@
-library feature1;
+library cart;
 
 export 'src/routes.dart';

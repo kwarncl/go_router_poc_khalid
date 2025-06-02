@@ -7,11 +7,12 @@
         {
             "name": "Run App",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "lib/main.dart"
         },
         {
-            "name": "Run Feature 1",
-            "cwd": "packages/feature1",
+            "name": "Run Cart",
+            "cwd": "packages/cart",
             "request": "launch",
             "type": "dart"
         },
