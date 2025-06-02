@@ -8,11 +8,12 @@ final feature1Routes = [
   GoRoute(
     path: '/feature1',
     builder: (context, state) => const Feature1ListScreen(),
-  ),
-  GoRoute(
-    path: '/feature1/item/:id',
-    builder: (context, state) => Feature1DetailScreen(
-      itemId: state.pathParameters['id']!,
-    ),
+    routes: [
+      GoRoute(
+        path: 'item/:id',
+        builder: (context, state) =>
+            Feature1DetailScreen(itemId: state.pathParameters['id']!),
+      ),
+    ],
   ),
 ];

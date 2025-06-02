@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   
   # Navigation package for type-safe routing
-  go_router: ^13.2.0
+  go_router: ^15.1.2
 
   # Local feature packages
   feature1:

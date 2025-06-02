@@ -17,12 +17,14 @@ class Feature2TabsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ElevatedButton(
-              onPressed: () => context.push('/feature2/tab1'),
+              // Using go() for tab navigation as these are top-level routes within Feature 2
+              onPressed: () => context.go('/feature2/tab1'),
               child: const Text('Go to Tab 1'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => context.push('/feature2/tab2'),
+              // Using go() for tab navigation
+              onPressed: () => context.go('/feature2/tab2'),
               child: const Text('Go to Tab 2'),
             ),
           ],

@@ -9,13 +9,15 @@ final feature2Routes = [
   GoRoute(
     path: '/feature2',
     builder: (context, state) => const Feature2TabsScreen(),
-  ),
-  GoRoute(
-    path: '/feature2/tab1',
-    builder: (context, state) => const Feature2Tab1Screen(),
-  ),
-  GoRoute(
-    path: '/feature2/tab2',
-    builder: (context, state) => const Feature2Tab2Screen(),
+    routes: [
+      GoRoute(
+        path: 'tab1',
+        builder: (context, state) => const Feature2Tab1Screen(),
+      ),
+      GoRoute(
+        path: 'tab2',
+        builder: (context, state) => const Feature2Tab2Screen(),
+      ),
+    ],
   ),
 ];

@@ -16,7 +16,7 @@ class Feature1ListScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text('Item ${index + 1}'),
-            onTap: () => context.push('/feature1/item/${index + 1}'),
+            onTap: () => context.go('/feature1/item/${index + 1}'),
           );
         },
       ),

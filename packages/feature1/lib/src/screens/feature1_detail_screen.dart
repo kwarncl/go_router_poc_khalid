@@ -19,8 +19,10 @@ class Feature1DetailScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Details for item $itemId',
-                style: Theme.of(context).textTheme.headlineMedium),
+            Text(
+              'Details for item $itemId',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
             const SizedBox(height: 16),
             const Text('This is a detailed view of the item'),
           ],

@@ -3,7 +3,7 @@ import 'package:feature2/feature2.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'router.dart';
+import 'home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,8 +26,10 @@ final router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const HomeScreen(),
+      routes: [
+        ...feature1Routes,
+        ...feature2Routes,
+      ],
     ),
-    ...feature1Routes,
-    ...feature2Routes,
   ],
 );
