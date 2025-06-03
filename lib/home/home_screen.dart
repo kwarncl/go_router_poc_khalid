@@ -26,15 +26,22 @@ class HomeScreen extends StatelessWidget {
           ),
           ListTile(
             title: const Text('View Item 1'),
-            subtitle: const Text('Go directly to item 1 details'),
+            subtitle: const Text(
+              'Goes to item 1 PDP keeping Cart PLP in navigation stack',
+            ),
             trailing: const Icon(Icons.arrow_forward),
-            onTap: () => context.go('./cart/details/1'),
+            // onTap: () => context.go('./cart/details/1'),
+            onTap: () => context.go(
+              './${CartRoute.cartList.path}/${CartRoute.cartDetail.path}/1',
+            ),
           ),
           ListTile(
             title: const Text('View Item 2'),
-            subtitle: const Text('Go directly to item 2 details'),
+            subtitle: const Text(
+              'Go to item 2 PDP, without keeping Cart PLP in navigation stack',
+            ),
             trailing: const Icon(Icons.arrow_forward),
-            onTap: () => context.go('./details/2'),
+            onTap: () => context.go('./${CartRoute.cartDetail.path}/2'),
           ),
         ],
       ),

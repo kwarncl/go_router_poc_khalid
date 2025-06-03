@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 enum CartRoute {
-  cartList('/cart'),
-  cartDetail('/details/:id');
+  cartList('cart'),
+  cartDetail('details');
 
   final String path;
   const CartRoute(this.path);
@@ -25,7 +25,7 @@ List<GoRoute> getCartRoutes(GlobalKey<NavigatorState>? navigatorKey) {
       },
       routes: [
         GoRoute(
-          path: CartRoute.cartDetail.path,
+          path: '${CartRoute.cartDetail.path}/:id',
           parentNavigatorKey: navigatorKey,
           builder: (context, state) {
             final itemId = state.pathParameters['id']!;
@@ -35,7 +35,7 @@ List<GoRoute> getCartRoutes(GlobalKey<NavigatorState>? navigatorKey) {
       ],
     ),
     GoRoute(
-      path: CartRoute.cartDetail.path,
+      path: '${CartRoute.cartDetail.path}/:id',
       parentNavigatorKey: navigatorKey,
       builder: (context, state) {
         final itemId = state.pathParameters['id']!;
