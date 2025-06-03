@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router_poc_khalid/common/error_screen.dart';
 import 'package:go_router_poc_khalid/common/home_container.dart';
+import 'package:menu/menu.dart';
 
 import 'home/home_screen.dart';
 import 'home/profile_screen.dart';
@@ -49,7 +50,10 @@ final router = GoRouter(
             GoRoute(
               path: AppRoute.home.path,
               builder: (context, state) => const HomeScreen(),
-              routes: getCartRoutes(rootNavigatorKey),
+              routes: [
+                ...getCartRoutes(rootNavigatorKey),
+                ...getMenuRoutes(rootNavigatorKey),
+              ],
             ),
           ],
         ),
