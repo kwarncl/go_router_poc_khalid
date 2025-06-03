@@ -6,16 +6,8 @@ class CartListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('[CartListScreen] Building screen');
-    final router = GoRouter.of(context);
-    debugPrint('[CartListScreen] Can pop: ${router.canPop()}');
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shopping Cart'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        automaticallyImplyLeading: true,
-      ),
+      appBar: AppBar(title: const Text('Cart Items')),
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) {
@@ -23,9 +15,7 @@ class CartListScreen extends StatelessWidget {
           return ListTile(
             title: Text('Cart Item $itemId'),
             onTap: () {
-              final targetPath = '/cart/item/$itemId';
-              debugPrint('[CartListScreen] Navigating to: $targetPath');
-              context.go(targetPath);
+              context.go('/home/cart/details/$itemId');
             },
           );
         },

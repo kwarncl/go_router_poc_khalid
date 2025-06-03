@@ -1,4 +1,3 @@
-import 'package:cart/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,24 +21,19 @@ class HomeScreen extends StatelessWidget {
             title: const Text('View Cart'),
             subtitle: const Text('Go to cart items list'),
             trailing: const Icon(Icons.shopping_cart),
-            onTap: () => context.go(CartRoute.cartList.path),
+            onTap: () => context.go('/home/cart'),
           ),
           ListTile(
             title: const Text('View Item 1'),
             subtitle: const Text('Go directly to item 1 details'),
             trailing: const Icon(Icons.arrow_forward),
-            onTap: () => context.go(CartRoute.cartDetail.location({'id': '1'})),
+            onTap: () => context.go('/home/cart/details/1'),
           ),
           ListTile(
             title: const Text('View Item 2'),
             subtitle: const Text('Go directly to item 2 details'),
             trailing: const Icon(Icons.arrow_forward),
-            onTap: () => context.go(CartRoute.cartDetail.location({'id': '2'})),
-          ),
-          const SizedBox(height: 50),
-          TextButton(
-            onPressed: () => context.go('/feature2'),
-            child: const Text('Go to Feature 2'),
+            onTap: () => context.go('/details/2'),
           ),
         ],
       ),

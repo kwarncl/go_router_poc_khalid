@@ -1,8 +1,8 @@
 import 'package:cart/cart.dart';
-import 'package:feature2/feature2.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router_poc_khalid/common/error_screen.dart';
+import 'package:go_router_poc_khalid/common/home_container.dart';
 
 import 'home/home_screen.dart';
 import 'home/profile_screen.dart';
@@ -11,26 +11,22 @@ import 'home/splash_screen.dart';
 
 // Root navigator key for the entire app
 final rootNavigatorKey = GlobalKey<NavigatorState>();
-// final _shellNavigatorKey = GlobalKey<NavigatorState>();
+final cartNavigatorKey = GlobalKey<NavigatorState>();
 
 enum AppRoute {
   splash('/'),
+
+  /// Stateful Shell
   home('/home'),
   profile('/profile'),
-  settings('/settings');
+  settings('/settings'),
+
+  /// Cart routes
+  cartList('/cart'),
+  cartDetail('/details/:id');
 
   final String path;
   const AppRoute(this.path);
-
-  String location([Map<String, String> params = const {}]) {
-    String location = path;
-    if (params.isNotEmpty) {
-      params.forEach((key, value) {
-        location = location.replaceFirst(':$key', value);
-      });
-    }
-    return location;
-  }
 }
 
 final router = GoRouter(
@@ -45,30 +41,17 @@ final router = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
 
+    /// Redirect /details/:id to /home/cart/details/:id for deep linking
+    GoRoute(
+      path: '/details/:id',
+      redirect: (context, state) =>
+          '/home/cart/details/${state.pathParameters['id']}',
+    ),
+
     /// Home route with Bottom Navigation Bar and pages
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return Scaffold(
-          body: navigationShell,
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: navigationShell.currentIndex,
-            onDestinationSelected: navigationShell.goBranch,
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.person),
-                label: 'Profile',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-              ),
-            ],
-          ),
-        );
+        return HomeContainer(navigationShell: navigationShell);
       },
       branches: [
         /// Home branch
@@ -77,6 +60,26 @@ final router = GoRouter(
             GoRoute(
               path: AppRoute.home.path,
               builder: (context, state) => const HomeScreen(),
+              pageBuilder: (context, state) => MaterialPage(
+                key: state.pageKey,
+                child: const HomeScreen(),
+              ),
+              routes: [
+                GoRoute(
+                  path: AppRoute.cartList.path,
+                  parentNavigatorKey: rootNavigatorKey,
+                  builder: (context, state) => const CartListScreen(),
+                  routes: [
+                    GoRoute(
+                      path: AppRoute.cartDetail.path,
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (context, state) => CartDetailScreen(
+                        itemId: state.pathParameters['id'] ?? '0',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
@@ -102,11 +105,5 @@ final router = GoRouter(
         ),
       ],
     ),
-
-    /// Cart routes
-    ...cartRoutes,
-
-    /// Feature 2 routes
-    ...feature2Routes,
   ],
 );
