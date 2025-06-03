@@ -42,8 +42,6 @@ dependencies:
   # Local feature packages
   cart:
     path: packages/cart
-  feature2:
-    path: packages/feature2
 
 dev_dependencies:
   flutter_test:
