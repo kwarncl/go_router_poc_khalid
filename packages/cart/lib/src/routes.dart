@@ -1,8 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:go_router/go_router.dart';
-
-// import 'screens/cart_detail_screen.dart';
-// import 'screens/cart_list_screen.dart';
 import 'package:cart/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

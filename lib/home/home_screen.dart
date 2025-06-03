@@ -8,15 +8,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Go Router Demo'),
-      ),
+      appBar: AppBar(title: const Text('Home')),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Shopping Cart',
-            style: Theme.of(context).textTheme.headlineMedium,
+            'Cart Navigation',
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           ListTile(
             title: const Text('View Cart'),

@@ -11,7 +11,8 @@ import 'home/splash_screen.dart';
 
 // Root navigator key for the entire app
 final rootNavigatorKey = GlobalKey<NavigatorState>();
-final cartNavigatorKey = GlobalKey<NavigatorState>();
+final homeNavigatorKey = GlobalKey<NavigatorState>();
+final authorizedNavigatorKey = GlobalKey<NavigatorState>();
 
 enum AppRoute {
   splash('/'),
@@ -20,10 +21,6 @@ enum AppRoute {
   home('/home'),
   profile('/profile'),
   settings('/settings');
-
-  /// Cart routes
-  // cartList('/cart'),
-  // cartDetail('/details/:id');
 
   final String path;
   const AppRoute(this.path);
@@ -41,19 +38,21 @@ final router = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
 
-    /// Home route with Bottom Navigation Bar and pages
+    /// Home route w,ith Bottom Navigation Bar and pages
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return HomeContainer(navigationShell: navigationShell);
       },
+      parentNavigatorKey: rootNavigatorKey,
       branches: [
         /// Home branch
         StatefulShellBranch(
+          navigatorKey: homeNavigatorKey,
           routes: [
             GoRoute(
               path: AppRoute.home.path,
               builder: (context, state) => const HomeScreen(),
-              routes: getCartRoutes(rootNavigatorKey),
+              // routes: getCartRoutes(rootNavigatorKey),
             ),
           ],
         ),
@@ -64,6 +63,7 @@ final router = GoRouter(
             GoRoute(
               path: AppRoute.profile.path,
               builder: (context, state) => const ProfileScreen(),
+              // routes: getCartRoutes(rootNavigatorKey),
             ),
           ],
         ),
@@ -79,5 +79,8 @@ final router = GoRouter(
         ),
       ],
     ),
+
+    /// Cart routes
+    ...getCartRoutes(rootNavigatorKey),
   ],
 );
