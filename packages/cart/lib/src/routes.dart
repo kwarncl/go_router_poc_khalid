@@ -29,6 +29,8 @@ List<GoRoute> getCartRoutes(GlobalKey<NavigatorState>? navigatorKey) {
         ),
       ],
     ),
+
+    /// Direct route to cart details (bypassing cart list)
     GoRoute(
       path: '${CartRoute.cartDetail.path}/:id',
       parentNavigatorKey: navigatorKey,

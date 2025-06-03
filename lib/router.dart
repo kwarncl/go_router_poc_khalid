@@ -11,8 +11,6 @@ import 'home/splash_screen.dart';
 
 // Root navigator key for the entire app
 final rootNavigatorKey = GlobalKey<NavigatorState>();
-final homeNavigatorKey = GlobalKey<NavigatorState>();
-final authorizedNavigatorKey = GlobalKey<NavigatorState>();
 
 enum AppRoute {
   splash('/'),
@@ -47,12 +45,11 @@ final router = GoRouter(
       branches: [
         /// Home branch
         StatefulShellBranch(
-          navigatorKey: homeNavigatorKey,
           routes: [
             GoRoute(
               path: AppRoute.home.path,
               builder: (context, state) => const HomeScreen(),
-              // routes: getCartRoutes(rootNavigatorKey),
+              routes: getCartRoutes(rootNavigatorKey),
             ),
           ],
         ),
@@ -63,7 +60,7 @@ final router = GoRouter(
             GoRoute(
               path: AppRoute.profile.path,
               builder: (context, state) => const ProfileScreen(),
-              // routes: getCartRoutes(rootNavigatorKey),
+              routes: getCartRoutes(rootNavigatorKey),
             ),
           ],
         ),
@@ -74,13 +71,11 @@ final router = GoRouter(
             GoRoute(
               path: AppRoute.settings.path,
               builder: (context, state) => const SettingsScreen(),
+              routes: getCartRoutes(rootNavigatorKey),
             ),
           ],
         ),
       ],
     ),
-
-    /// Cart routes
-    ...getCartRoutes(rootNavigatorKey),
   ],
 );

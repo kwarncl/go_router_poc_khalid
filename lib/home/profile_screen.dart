@@ -28,7 +28,6 @@ class ProfileScreen extends StatelessWidget {
               'Goes to item 1 PDP keeping Cart PLP in navigation stack',
             ),
             trailing: const Icon(Icons.arrow_forward),
-            // onTap: () => context.go('./cart/details/1'),
             onTap: () => context.go(
               './${CartRoute.cartList.path}/${CartRoute.cartDetail.path}/1',
             ),
