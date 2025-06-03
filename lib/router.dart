@@ -19,11 +19,11 @@ enum AppRoute {
   /// Stateful Shell
   home('/home'),
   profile('/profile'),
-  settings('/settings'),
+  settings('/settings');
 
   /// Cart routes
-  cartList('/cart'),
-  cartDetail('/details/:id');
+  // cartList('/cart'),
+  // cartDetail('/details/:id');
 
   final String path;
   const AppRoute(this.path);
@@ -41,13 +41,6 @@ final router = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
 
-    /// Redirect /details/:id to /home/cart/details/:id for deep linking
-    GoRoute(
-      path: '/details/:id',
-      redirect: (context, state) =>
-          '/home/cart/details/${state.pathParameters['id']}',
-    ),
-
     /// Home route with Bottom Navigation Bar and pages
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
@@ -60,26 +53,7 @@ final router = GoRouter(
             GoRoute(
               path: AppRoute.home.path,
               builder: (context, state) => const HomeScreen(),
-              pageBuilder: (context, state) => MaterialPage(
-                key: state.pageKey,
-                child: const HomeScreen(),
-              ),
-              routes: [
-                GoRoute(
-                  path: AppRoute.cartList.path,
-                  parentNavigatorKey: rootNavigatorKey,
-                  builder: (context, state) => const CartListScreen(),
-                  routes: [
-                    GoRoute(
-                      path: AppRoute.cartDetail.path,
-                      parentNavigatorKey: rootNavigatorKey,
-                      builder: (context, state) => CartDetailScreen(
-                        itemId: state.pathParameters['id'] ?? '0',
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+              routes: getCartRoutes(rootNavigatorKey),
             ),
           ],
         ),

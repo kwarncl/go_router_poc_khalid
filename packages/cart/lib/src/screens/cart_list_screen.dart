@@ -15,7 +15,7 @@ class CartListScreen extends StatelessWidget {
           return ListTile(
             title: Text('Cart Item $itemId'),
             onTap: () {
-              context.go('/home/cart/details/$itemId');
+              context.go('./details/$itemId');
             },
           );
         },
