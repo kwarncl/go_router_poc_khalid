@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
 
             /// Navigate to menu modal using absolute path
             /// This opens a fullscreen modal dialog over the current tab
-            onPressed: () => context.go('./${MenuRoute.menuList.path}'),
+            onPressed: () => context.go('/home/${MenuRoute.menuList.path}'),
           ),
         ],
       ),

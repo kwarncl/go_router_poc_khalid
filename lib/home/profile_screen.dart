@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.restaurant_menu),
             tooltip: 'Menu',
-            onPressed: () => context.go('./${MenuRoute.menuList.path}'),
+            onPressed: () => context.go('/profile/${MenuRoute.menuList.path}'),
           ),
         ],
       ),
