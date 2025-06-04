@@ -17,18 +17,9 @@ class MenuDetailScreen extends StatelessWidget {
         title: Text('Menu Item $itemId'),
         actions: [
           IconButton(
-            onPressed: () {
-              final StatefulNavigationShellState? navigationShell =
-                  StatefulNavigationShell.maybeOf(context);
-
-              if (navigationShell != null) {
-                // Use the built-in goBranch method with initialLocation to go to root
-                navigationShell.goBranch(
-                  navigationShell.currentIndex,
-                  initialLocation: true,
-                );
-              }
-            },
+            /// Close the entire modal shell and return to home tab
+            /// Uses absolute path to dismiss modal and navigate to home root
+            onPressed: () => context.go('/home'),
             icon: const Icon(Icons.close),
             tooltip: 'Close',
           ),
