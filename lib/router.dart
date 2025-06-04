@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router_poc_khalid/common/error_screen.dart';
 import 'package:go_router_poc_khalid/common/home_container.dart';
+import 'package:go_router_poc_khalid/home/widgets/about_settings_screen.dart';
+import 'package:go_router_poc_khalid/home/widgets/account_settings_screen.dart';
+import 'package:go_router_poc_khalid/home/widgets/notification_settings_screen.dart';
+import 'package:go_router_poc_khalid/home/widgets/security_settings_screen.dart';
+import 'package:go_router_poc_khalid/home/widgets/settings_detail_screen.dart';
 import 'package:menu/menu.dart';
 
 import 'home/home_screen.dart';
@@ -20,7 +25,16 @@ enum AppRoute {
   /// Stateful Shell routes
   home('/home'),
   profile('/profile'),
-  settings('/settings');
+  settings('/settings'),
+
+  /// Settings subpages
+  settingsAccount('/settings/account'),
+  settingsNotifications('/settings/notifications'),
+  settingsSecurity('/settings/security'),
+  settingsAbout('/settings/about'),
+
+  /// Settings detail
+  settingsDetail('detail');
 
   final String path;
   const AppRoute(this.path);
@@ -73,15 +87,114 @@ final router = GoRouter(
           ],
         ),
 
-        /// Settings branch
+        /// Settings branch with nested tabs
         StatefulShellBranch(
           routes: [
-            GoRoute(
-              path: AppRoute.settings.path,
-              builder: (context, state) => const SettingsScreen(),
-              routes: [
-                ...getCartRoutes(rootNavigatorKey),
-                ...getMenuRoutes(rootNavigatorKey),
+            /// Nested StatefulShellRoute for settings tabs
+            StatefulShellRoute.indexedStack(
+              builder: (context, state, settingsNavigationShell) {
+                return SettingsScreen(navigationShell: settingsNavigationShell);
+              },
+              branches: [
+                /// Account settings branch
+                StatefulShellBranch(
+                  routes: [
+                    GoRoute(
+                      path: AppRoute.settingsAccount.path,
+                      builder: (context, state) =>
+                          const AccountSettingsScreen(),
+                      routes: [
+                        GoRoute(
+                          path: AppRoute.settingsDetail.path,
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (context, state) {
+                            final title =
+                                state.uri.queryParameters['title'] ?? 'Setting';
+                            return SettingsDetailScreen(
+                              title: title,
+                              settingType: 'account',
+                            );
+                          },
+                        ),
+                        ...getCartRoutes(rootNavigatorKey),
+                      ],
+                    ),
+                  ],
+                ),
+
+                /// Notification settings branch
+                StatefulShellBranch(
+                  routes: [
+                    GoRoute(
+                      path: AppRoute.settingsNotifications.path,
+                      builder: (context, state) =>
+                          const NotificationSettingsScreen(),
+                      routes: [
+                        GoRoute(
+                          path: AppRoute.settingsDetail.path,
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (context, state) {
+                            final title =
+                                state.uri.queryParameters['title'] ?? 'Setting';
+                            return SettingsDetailScreen(
+                              title: title,
+                              settingType: 'notifications',
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                /// Security settings branch
+                StatefulShellBranch(
+                  routes: [
+                    GoRoute(
+                      path: AppRoute.settingsSecurity.path,
+                      builder: (context, state) =>
+                          const SecuritySettingsScreen(),
+                      routes: [
+                        GoRoute(
+                          path: AppRoute.settingsDetail.path,
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (context, state) {
+                            final title =
+                                state.uri.queryParameters['title'] ?? 'Setting';
+                            return SettingsDetailScreen(
+                              title: title,
+                              settingType: 'security',
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                /// About settings branch
+                StatefulShellBranch(
+                  routes: [
+                    GoRoute(
+                      path: AppRoute.settingsAbout.path,
+                      builder: (context, state) => const AboutSettingsScreen(),
+                      routes: [
+                        GoRoute(
+                          path: AppRoute.settingsDetail.path,
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (context, state) {
+                            final title =
+                                state.uri.queryParameters['title'] ?? 'Setting';
+                            return SettingsDetailScreen(
+                              title: title,
+                              settingType: 'about',
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
           ],

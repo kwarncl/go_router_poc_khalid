@@ -1,10 +1,14 @@
-import 'package:cart/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:menu/menu.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  final StatefulNavigationShell navigationShell;
+
+  const SettingsScreen({
+    super.key,
+    required this.navigationShell,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,42 +32,108 @@ class SettingsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.restaurant_menu),
             tooltip: 'Menu',
-            onPressed: () => context.go('/settings/${MenuRoute.menuList.path}'),
+            onPressed: () => context.go('/home/${MenuRoute.menuList.path}'),
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(56),
+          child: SizedBox(
+            height: 56,
+            child: Row(
+              children: [
+                Expanded(
+                  child: _TabButton(
+                    label: 'Account',
+                    icon: Icons.person,
+                    isSelected: navigationShell.currentIndex == 0,
+                    onTap: () => navigationShell.goBranch(
+                      0,
+                      initialLocation: 0 == navigationShell.currentIndex,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: _TabButton(
+                    label: 'Notifications',
+                    icon: Icons.notifications,
+                    isSelected: navigationShell.currentIndex == 1,
+                    onTap: () => navigationShell.goBranch(
+                      1,
+                      initialLocation: 1 == navigationShell.currentIndex,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: _TabButton(
+                    label: 'Security',
+                    icon: Icons.security,
+                    isSelected: navigationShell.currentIndex == 2,
+                    onTap: () => navigationShell.goBranch(
+                      2,
+                      initialLocation: 2 == navigationShell.currentIndex,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: _TabButton(
+                    label: 'About',
+                    icon: Icons.info,
+                    isSelected: navigationShell.currentIndex == 3,
+                    onTap: () => navigationShell.goBranch(
+                      3,
+                      initialLocation: 3 == navigationShell.currentIndex,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Cart Navigation',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          ListTile(
-            title: const Text('View Cart'),
-            subtitle: const Text('Go to cart items list'),
-            trailing: const Icon(Icons.shopping_cart),
-            onTap: () => context.go('./${CartRoute.cartList.path}'),
-          ),
-          ListTile(
-            title: const Text('View Item 1'),
-            subtitle: const Text(
-              'Goes to item 1 PDP keeping Cart PLP in navigation stack',
+      body: navigationShell,
+    );
+  }
+}
+
+class _TabButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _TabButton({
+    required this.label,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = isSelected ? theme.primaryColor : theme.unselectedWidgetColor;
+
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 18, color: color),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: color,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                fontSize: 11,
+              ),
+              textAlign: TextAlign.center,
             ),
-            trailing: const Icon(Icons.arrow_forward),
-            onTap: () => context.go(
-              './${CartRoute.cartList.path}/${CartRoute.cartDetail.path}/1',
-            ),
-          ),
-          ListTile(
-            title: const Text('View Item 2'),
-            subtitle: const Text(
-              'Go to item 2 PDP, without keeping Cart PLP in navigation stack',
-            ),
-            trailing: const Icon(Icons.arrow_forward),
-            onTap: () => context.go('./${CartRoute.cartDetail.path}/2'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
