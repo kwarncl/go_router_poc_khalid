@@ -33,10 +33,10 @@ class MenuDetailScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(Icons.restaurant_menu),
+              child: const Icon(Icons.restaurant_menu),
             ),
             Text(
               'Menu Item $itemId',
