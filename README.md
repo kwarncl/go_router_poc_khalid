@@ -1,62 +1,279 @@
 # GoRouter POC - Flutter Navigation Demo
 
-A Flutter application demonstrating sophisticated navigation patterns using `go_router` with clean architecture and type-safe routing.
+A Flutter application demonstrating navigation patterns using `go_router` with `StatefulShellRoute.indexedStack`, modular packages, and modern Dart syntax.
+
+## Architecture
+
+- **StatefulShellRoute.indexedStack** for persistent bottom navigation
+- **Feature packages** (Cart & Menu) with reusable navigation
+- **Enhanced switch expressions** for clean code
+- **Type-safe routing** with enum-based navigation
 
 ## App Structure
 
-### Main Tabs (StatefulShellRoute)
+### Main Navigation
 
-- **Home** - `/home`
-- **Profile** - `/profile`
-- **Settings** - `/settings`
+```
+StatefulShellRoute.indexedStack
+├── Branch 0: /home (HomeScreen)
+├── Branch 1: /profile (ProfileScreen)
+└── Branch 2: /settings (SettingsScreen)
+```
 
-### Feature Packages
-
-- **Cart Package** - Shopping cart with hierarchical navigation
-- **Menu Package** - Modal menu with fullscreen dialog
-
-## Route Diagram
+### Route Architecture
 
 ```
 / (SplashScreen)
 │
-└── StatefulShellRoute
-    ├── /home (HomeScreen)
-    │   ├── cart (CartListScreen)
-    │   │   └── details/:id (CartDetailScreen)
-    │   ├── details/:id (CartDetailScreen) [direct]
-    │   └── ShellRoute [fullscreen modal]
-    │       └── menu (MenuListScreen)
-    │           └── details/:id (MenuDetailScreen)
+└── StatefulShellRoute.indexedStack
+    ├── /home
+    │   ├── cart → details/:id (hierarchical)
+    │   ├── details/:id (direct)
+    │   └── menu → details/:id (modal)
     │
-    ├── /profile (ProfileScreen)
-    │   ├── cart (CartListScreen)
-    │   │   └── details/:id (CartDetailScreen)
-    │   ├── details/:id (CartDetailScreen) [direct]
-    │   └── ShellRoute [fullscreen modal]
-    │       └── menu (MenuListScreen)
-    │           └── details/:id (MenuDetailScreen)
+    ├── /profile
+    │   ├── cart → details/:id
+    │   ├── details/:id
+    │   └── menu → details/:id
     │
-    └── /settings (SettingsScreen)
-        ├── cart (CartListScreen)
-        │   └── details/:id (CartDetailScreen)
-        ├── details/:id (CartDetailScreen) [direct]
-        └── ShellRoute [fullscreen modal]
-            └── menu (MenuListScreen)
-                └── details/:id (MenuDetailScreen)
+    └── /settings
+        ├── cart → details/:id
+        ├── details/:id
+        └── menu → details/:id
 ```
 
-**Route Examples:**
+## GoRouter Implementation
 
-- `/home/cart/details/1` - Hierarchical cart navigation
-- `/profile/details/2` - Direct cart navigation
-- `/settings/menu/details/3` - Menu modal navigation
+### Router Configuration
+
+```dart
+final GlobalKey<NavigatorState> rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+
+final router = GoRouter(
+  initialLocation: AppRoute.splash.path,
+  navigatorKey: rootNavigatorKey,
+  debugLogDiagnostics: true,
+  routes: [
+    // Splash route (outside shell)
+    GoRoute(
+      path: AppRoute.splash.path,
+      builder: (context, state) => const SplashScreen(),
+    ),
+
+    // Main shell with persistent bottom navigation
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
+        return HomeContainer(navigationShell: navigationShell);
+      },
+      parentNavigatorKey: rootNavigatorKey,
+      branches: [
+        // Home branch
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoute.home.path,
+              builder: (context, state) => const HomeScreen(),
+              routes: [
+                ...getCartRoutes(rootNavigatorKey),
+                ...getMenuRoutes(rootNavigatorKey),
+              ],
+            ),
+          ],
+        ),
+        // Profile and Settings branches...
+      ],
+    ),
+  ],
+);
+```
+
+### Bottom Navigation Container
+
+```dart
+class HomeContainer extends StatelessWidget {
+  const HomeContainer({super.key, required this.navigationShell});
+
+  final StatefulNavigationShell navigationShell;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: navigationShell,
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: navigationShell.currentIndex,
+        onDestinationSelected: navigationShell.goBranch,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+### Package Route Integration
+
+**Cart Routes:**
+
+```dart
+List<GoRoute> getCartRoutes(GlobalKey<NavigatorState>? navigatorKey) {
+  return [
+    // Hierarchical route: Cart List → Cart Detail
+    GoRoute(
+      path: CartRoute.cartList.path,
+      parentNavigatorKey: navigatorKey,
+      builder: (context, state) => const CartListScreen(),
+      routes: [
+        GoRoute(
+          path: '${CartRoute.cartDetail.path}/:id',
+          parentNavigatorKey: navigatorKey,
+          builder: (context, state) {
+            final itemId = state.pathParameters['id']!;
+            return CartDetailScreen(itemId: itemId);
+          },
+        ),
+      ],
+    ),
+    // Direct route: bypasses cart list
+    GoRoute(
+      path: '${CartRoute.cartDetail.path}/:id',
+      parentNavigatorKey: navigatorKey,
+      builder: (context, state) {
+        final itemId = state.pathParameters['id']!;
+        return CartDetailScreen(itemId: itemId);
+      },
+    ),
+  ];
+}
+```
+
+**Menu Routes:**
+
+```dart
+List<RouteBase> getMenuRoutes([GlobalKey<NavigatorState>? navigatorKey]) {
+  return [
+    ShellRoute(
+      parentNavigatorKey: navigatorKey,
+      pageBuilder: (context, state, child) {
+        return MaterialPage(
+          key: state.pageKey,
+          child: child,
+          fullscreenDialog: true,
+        );
+      },
+      routes: [
+        GoRoute(
+          path: MenuRoute.menuList.path,
+          builder: (context, state) => const MenuListScreen(),
+          routes: [
+            GoRoute(
+              path: '${MenuRoute.menuDetail.path}/:id',
+              builder: (context, state) {
+                final itemId = state.pathParameters['id']!;
+                return MenuDetailScreen(itemId: itemId);
+              },
+            ),
+          ],
+        ),
+      ],
+    ),
+  ];
+}
+```
+
+## Route Examples
+
+| Route                     | Description                | Navigation Stack         |
+| ------------------------- | -------------------------- | ------------------------ |
+| `/`                       | Splash screen              | Splash                   |
+| `/home`                   | Home tab                   | Home                     |
+| `/home/cart`              | Cart list in home          | Home → Cart              |
+| `/home/cart/details/1`    | Cart detail (hierarchical) | Home → Cart → Detail     |
+| `/home/details/2`         | Cart detail (direct)       | Home → Detail            |
+| `/home/menu`              | Menu modal                 | Home + Modal             |
+| `/profile/menu/details/3` | Menu detail in modal       | Profile + Modal → Detail |
 
 ## Navigation Patterns
 
 ### 1. Tab Navigation
 
-Uses `AppRoute` enum for type-safe navigation between main tabs:
+Uses `StatefulShellRoute` for persistent bottom navigation:
+
+```dart
+// Proper tab switching (preserves state)
+navigationShell.goBranch(index)
+
+// ❌ Wrong: Would bypass state preservation
+context.go('/home')
+```
+
+### 2. Cart Navigation
+
+**Hierarchical** (maintains navigation stack):
+
+```dart
+context.go('./${CartRoute.cartList.path}/${CartRoute.cartDetail.path}/1');
+// Results in: /home/cart/details/1 (back button goes to cart list)
+```
+
+**Direct** (bypasses intermediate screens):
+
+```dart
+context.go('./${CartRoute.cartDetail.path}/2');
+// Results in: /home/details/2 (back button goes to home)
+```
+
+### 3. Menu Navigation
+
+**Modal** with return-to-origin logic:
+
+```dart
+// Open modal
+context.go('/home/${MenuRoute.menuList.path}');
+
+// Return to originating tab (enhanced switch expression)
+static void returnToOriginatingTab(BuildContext context) {
+  final targetRoute = switch (GoRouterState.of(context).fullPath) {
+    String path when path.contains('/home/') => '/home',
+    String path when path.contains('/profile/') => '/profile',
+    String path when path.contains('/settings/') => '/settings',
+    _ => '/home',
+  };
+  context.go(targetRoute);
+}
+```
+
+## Usage Examples
+
+### Basic Navigation
+
+```dart
+// Tab navigation
+context.go(AppRoute.profile.path);
+
+// Cart (hierarchical)
+context.go('./${CartRoute.cartList.path}/${CartRoute.cartDetail.path}/1');
+
+// Cart (direct)
+context.go('./${CartRoute.cartDetail.path}/2');
+
+// Menu modal
+context.go('/home/${MenuRoute.menuList.path}');
+```
+
+### Route Enums
 
 ```dart
 enum AppRoute {
@@ -64,91 +281,47 @@ enum AppRoute {
   home('/home'),
   profile('/profile'),
   settings('/settings');
+
+  final String path;
+  const AppRoute(this.path);
 }
-```
 
-### 2. Cart Navigation
-
-Two navigation patterns using `CartRoute` enum:
-
-**Hierarchical**: Maintains navigation stack
-
-```dart
-context.go('./cart/details/1');        // /home/cart/details/1
-```
-
-**Direct**: Bypasses cart list
-
-```dart
-context.go('./details/2');             // /home/details/2
-```
-
-### 3. Menu Navigation
-
-Modal overlay using `MenuRoute` enum:
-
-```dart
-context.go('/home/menu');              // Opens fullscreen modal
-```
-
-## Route Enums
-
-### AppRoute
-
-```dart
-enum AppRoute {
-  home('/home'),
-  profile('/profile'),
-  settings('/settings');
-}
-```
-
-### CartRoute
-
-```dart
 enum CartRoute {
   cartList('cart'),
   cartDetail('details');
+
+  final String path;
+  const CartRoute(this.path);
 }
-```
 
-### MenuRoute
-
-```dart
 enum MenuRoute {
   menuList('menu'),
   menuDetail('details');
+
+  final String path;
+  const MenuRoute(this.path);
 }
 ```
 
-## Key Features
+## Feature Packages
 
-- **Type-safe routing** with enums
-- **Multi-tab consistency** - same features available in all tabs
-- **Modal navigation** - menu opens as fullscreen dialog
-- **Hierarchical navigation** - maintains proper navigation stack
-- **Deep linking** - direct URL access to any screen
-- **Route path display** - shows current route in AppBar for debugging
+### Cart Package (`packages/cart/`)
 
-## Navigation Examples
+- Hierarchical and direct navigation patterns
+- Reusable across all tabs
+- Parameter-based routing
 
-```dart
-// Tab navigation
-context.go(AppRoute.profile.path);
+### Menu Package (`packages/menu/`)
 
-// Cart navigation (hierarchical)
-context.go('./${CartRoute.cartList.path}/${CartRoute.cartDetail.path}/1');
+- Modal navigation with ShellRoute
+- Return-to-origin functionality
+- Fullscreen dialog presentation
 
-// Cart navigation (direct)
-context.go('./${CartRoute.cartDetail.path}/2');
+## Features
 
-// Menu navigation
-context.go('/home/${MenuRoute.menuList.path}');
-```
-
-## Architecture
-
-- **Clean separation** - each feature in its own package
-- **Reusable components** - packages work across all tabs
-- **Consistent patterns** - same navigation logic everywhere
-- **Error handling** - fallback routes for invalid navigation
+✅ Persistent bottom navigation with state preservation  
+✅ Hierarchical and direct navigation patterns  
+✅ Modal navigation with return-to-origin  
+✅ Deep linking support  
+✅ Type-safe routing with enums  
+✅ Modern Dart syntax with enhanced switch expressions
