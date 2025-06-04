@@ -10,13 +10,14 @@ import 'home/profile_screen.dart';
 import 'home/settings_screen.dart';
 import 'home/splash_screen.dart';
 
-// Root navigator key for the entire app
-final rootNavigatorKey = GlobalKey<NavigatorState>();
+// Navigator keys for the app
+final GlobalKey<NavigatorState> rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
 
 enum AppRoute {
   splash('/'),
 
-  /// Stateful Shell
+  /// Stateful Shell routes
   home('/home'),
   profile('/profile'),
   settings('/settings');
@@ -26,18 +27,18 @@ enum AppRoute {
 }
 
 final router = GoRouter(
-  initialLocation: '/',
+  initialLocation: AppRoute.splash.path,
   navigatorKey: rootNavigatorKey,
-  errorBuilder: (context, state) => ErrorScreen(),
+  errorBuilder: (context, state) => const ErrorScreen(),
   debugLogDiagnostics: true,
   routes: [
-    /// Splash route
+    /// Splash route - outside of shell
     GoRoute(
       path: AppRoute.splash.path,
       builder: (context, state) => const SplashScreen(),
     ),
 
-    /// Home route with Bottom Navigation Bar and pages
+    /// Stateful Shell route with Bottom Navigation Bar and pages
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return HomeContainer(navigationShell: navigationShell);
