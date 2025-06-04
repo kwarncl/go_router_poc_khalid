@@ -23,7 +23,6 @@ class CartDetailScreen extends StatelessWidget {
             const SizedBox(height: 16),
             TextButton(
               onPressed: () {
-                debugPrint('[CartDetailScreen] Adding item $itemId to cart');
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Added item $itemId to cart')),
                 );
