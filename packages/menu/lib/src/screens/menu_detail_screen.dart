@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:menu/menu.dart';
 
 class MenuDetailScreen extends StatelessWidget {
   final String itemId;
@@ -17,9 +17,8 @@ class MenuDetailScreen extends StatelessWidget {
         title: Text('Menu Item $itemId'),
         actions: [
           IconButton(
-            /// Close the entire modal shell and return to home tab
-            /// Uses absolute path to dismiss modal and navigate to home root
-            onPressed: () => context.go('/home'),
+            /// Close the modal and return to the originating tab
+            onPressed: () => MenuRoute.returnToOriginatingTab(context),
             icon: const Icon(Icons.close),
             tooltip: 'Close',
           ),

@@ -37,7 +37,7 @@ final router = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
 
-    /// Home route w,ith Bottom Navigation Bar and pages
+    /// Home route with Bottom Navigation Bar and pages
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return HomeContainer(navigationShell: navigationShell);
@@ -64,7 +64,10 @@ final router = GoRouter(
             GoRoute(
               path: AppRoute.profile.path,
               builder: (context, state) => const ProfileScreen(),
-              routes: getCartRoutes(rootNavigatorKey),
+              routes: [
+                ...getCartRoutes(rootNavigatorKey),
+                ...getMenuRoutes(rootNavigatorKey),
+              ],
             ),
           ],
         ),
@@ -75,7 +78,10 @@ final router = GoRouter(
             GoRoute(
               path: AppRoute.settings.path,
               builder: (context, state) => const SettingsScreen(),
-              routes: getCartRoutes(rootNavigatorKey),
+              routes: [
+                ...getCartRoutes(rootNavigatorKey),
+                ...getMenuRoutes(rootNavigatorKey),
+              ],
             ),
           ],
         ),
