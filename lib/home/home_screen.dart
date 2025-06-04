@@ -49,6 +49,7 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   ListTile(
+                    dense: true,
                     title: const Text('View Cart'),
                     subtitle: const Text('Go to cart items list'),
                     trailing: const Icon(Icons.shopping_cart),
@@ -58,6 +59,7 @@ class HomeScreen extends StatelessWidget {
                     onTap: () => context.go('./${CartRoute.cartList.path}'),
                   ),
                   ListTile(
+                    dense: true,
                     title: const Text('View Item 1'),
                     subtitle: const Text(
                       'Goes to item 1 PDP keeping Cart PLP in navigation stack',
@@ -71,6 +73,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
+                    dense: true,
                     title: const Text('View Item 2'),
                     subtitle: const Text(
                       'Go to item 2 PDP, without keeping Cart PLP in navigation stack',
@@ -80,6 +83,35 @@ class HomeScreen extends StatelessWidget {
                     /// Navigate directly to item detail bypassing cart list
                     /// Results in: /home/details/2 (no cart list in nav stack)
                     onTap: () => context.go('./${CartRoute.cartDetail.path}/2'),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Menu Navigation',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 8),
+            Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Icons.restaurant_menu),
+                    title: const Text('View Menu'),
+                    subtitle: const Text('Browse restaurant menu items'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.go('/home/${MenuRoute.menuList.path}'),
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Icons.fastfood),
+                    title: const Text('Menu Item 4'),
+                    subtitle: const Text('Go directly to menu item 4 details'),
+                    trailing: const Icon(Icons.arrow_forward),
+                    onTap: () => context.go(
+                        '/home/${MenuRoute.menuList.path}/${MenuRoute.menuDetail.path}/4'),
                   ),
                 ],
               ),
@@ -101,6 +133,7 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   ListTile(
+                    dense: true,
                     leading: const Icon(Icons.person),
                     title: const Text('Account Settings'),
                     subtitle: const Text('Go directly to account tab'),
@@ -108,6 +141,7 @@ class HomeScreen extends StatelessWidget {
                     onTap: () => context.go(AppRoute.settingsAccount.path),
                   ),
                   ListTile(
+                    dense: true,
                     leading: const Icon(Icons.notifications),
                     title: const Text('Notification Settings'),
                     subtitle: const Text('Go directly to notifications tab'),
@@ -116,6 +150,7 @@ class HomeScreen extends StatelessWidget {
                         context.go(AppRoute.settingsNotifications.path),
                   ),
                   ListTile(
+                    dense: true,
                     leading: const Icon(Icons.security),
                     title: const Text('Security Settings'),
                     subtitle: const Text('Go directly to security tab'),
@@ -123,6 +158,7 @@ class HomeScreen extends StatelessWidget {
                     onTap: () => context.go(AppRoute.settingsSecurity.path),
                   ),
                   ListTile(
+                    dense: true,
                     leading: const Icon(Icons.info),
                     title: const Text('About'),
                     subtitle: const Text('Go directly to about tab'),
