@@ -7,7 +7,22 @@ class CartListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Cart Items')),
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Cart Items'),
+            Text(
+              GoRouterState.of(context).fullPath ?? 'Unknown',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color:
+                        Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                  ),
+            ),
+          ],
+        ),
+      ),
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) {

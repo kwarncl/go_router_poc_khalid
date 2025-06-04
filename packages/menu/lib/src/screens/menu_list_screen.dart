@@ -9,7 +9,20 @@ class MenuListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Menu Items'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Menu Items'),
+            Text(
+              GoRouterState.of(context).fullPath ?? 'Unknown',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color:
+                        Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                  ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             /// Close the modal and return to the originating tab

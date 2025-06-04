@@ -10,7 +10,20 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Profile'),
+            Text(
+              GoRouterState.of(context).fullPath ?? 'Unknown',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color:
+                        Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                  ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.restaurant_menu),

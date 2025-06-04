@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:menu/menu.dart';
+import 'package:go_router/go_router.dart';
 
 class MenuDetailScreen extends StatelessWidget {
   final String itemId;
@@ -14,7 +15,20 @@ class MenuDetailScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Menu Item $itemId'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Menu Item $itemId'),
+            Text(
+              GoRouterState.of(context).fullPath ?? 'Unknown',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color:
+                        Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                  ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             /// Close the modal and return to the originating tab
