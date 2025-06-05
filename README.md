@@ -257,7 +257,26 @@ static void returnToOriginatingTab(BuildContext context) {
 
 ## Usage Examples
 
-### Basic Navigation
+### Type-Safe Navigation (Recommended)
+
+```dart
+// Tab navigation
+const ProfileRouteData().go(context);
+
+// Cart (hierarchical)
+const CartDetailFromListRouteData(id: '1').go(context);
+
+// Cart (direct)
+const CartDetailDirectRouteData(id: '2').go(context);
+
+// Menu modal
+const MenuListRouteData().go(context);
+
+// Settings navigation
+const SettingsAccountRouteData().go(context);
+```
+
+### Traditional String Navigation
 
 ```dart
 // Tab navigation
@@ -317,11 +336,65 @@ enum MenuRoute {
 - Return-to-origin functionality
 - Fullscreen dialog presentation
 
+## Type-Safe Routes
+
+This project implements type-safe routing using `go_router_builder` for compile-time safety and auto-completion.
+
+### Dependencies
+
+- `go_router_builder`: Generates type-safe routes
+- `build_runner`: Code generation tool
+- `build_verify`: Verification of generated code
+
+### Type-Safe Route Classes
+
+All routes have corresponding `GoRouteData` classes:
+
+**Main Routes:**
+
+- `SplashRouteData` - Application splash screen
+- `HomeRouteData` - Home tab
+- `ProfileRouteData` - Profile tab
+
+**Settings Routes:**
+
+- `SettingsAccountRouteData` - Account settings tab
+- `SettingsNotificationsRouteData` - Notifications settings tab
+- `SettingsSecurityRouteData` - Security settings tab
+- `SettingsAboutRouteData` - About settings tab
+
+**Cart Routes:**
+
+- `CartListRouteData` - Cart list screen
+- `CartDetailFromListRouteData` - Cart detail from list (with id parameter)
+- `CartDetailDirectRouteData` - Direct cart detail (with id parameter)
+
+**Menu Routes:**
+
+- `MenuListRouteData` - Menu list screen
+- `MenuDetailRouteData` - Menu detail screen (with id parameter)
+
+### Benefits
+
+✅ **Compile-time Safety**: Routes validated at compile time  
+✅ **Auto-completion**: IDE provides auto-completion for route parameters  
+✅ **Type Safety**: Parameters are strongly typed  
+✅ **Refactoring Support**: Renaming routes updates all references  
+✅ **Error Prevention**: Impossible to create invalid routes
+
+### Code Generation
+
+When you modify routes, run:
+
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
 ## Features
 
 ✅ Persistent bottom navigation with state preservation  
 ✅ Hierarchical and direct navigation patterns  
 ✅ Modal navigation with return-to-origin  
 ✅ Deep linking support  
-✅ Type-safe routing with enums  
+✅ Type-safe routing with `go_router_builder`  
 ✅ Modern Dart syntax with enhanced switch expressions

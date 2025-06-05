@@ -3,54 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router_poc_khalid/common/error_screen.dart';
 import 'package:go_router_poc_khalid/common/home_container.dart';
-import 'package:go_router_poc_khalid/home/widgets/about_settings_screen.dart';
-import 'package:go_router_poc_khalid/home/widgets/account_settings_screen.dart';
-import 'package:go_router_poc_khalid/home/widgets/notification_settings_screen.dart';
-import 'package:go_router_poc_khalid/home/widgets/security_settings_screen.dart';
-import 'package:go_router_poc_khalid/home/widgets/settings_detail_screen.dart';
+import 'package:go_router_poc_khalid/home/settings_screen.dart';
+import 'package:go_router_poc_khalid/routes/routes.dart';
 import 'package:menu/menu.dart';
-
-import 'home/home_screen.dart';
-import 'home/profile_screen.dart';
-import 'home/settings_screen.dart';
-import 'home/splash_screen.dart';
 
 // Navigator keys for the app
 final GlobalKey<NavigatorState> rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
-enum AppRoute {
-  splash('/'),
-
-  /// Stateful Shell routes
-  home('/home'),
-  profile('/profile'),
-  settings('/settings'),
-
-  /// Settings subpages
-  settingsAccount('/settings/account'),
-  settingsNotifications('/settings/notifications'),
-  settingsSecurity('/settings/security'),
-  settingsAbout('/settings/about'),
-
-  /// Settings detail
-  settingsDetail('detail');
-
-  final String path;
-  const AppRoute(this.path);
-}
-
+/// Type-safe router configuration using generated routes consistently
 final router = GoRouter(
-  initialLocation: AppRoute.splash.path,
+  initialLocation: const SplashScreenRouteData().location,
   navigatorKey: rootNavigatorKey,
   errorBuilder: (context, state) => const ErrorScreen(),
   debugLogDiagnostics: true,
   routes: [
-    /// Splash route - outside of shell
-    GoRoute(
-      path: AppRoute.splash.path,
-      builder: (context, state) => const SplashScreen(),
-    ),
+    /// Main app routes are fully type-safe with proper generation
+    $splashScreenRouteData,
 
     /// Stateful Shell route with Bottom Navigation Bar and pages
     StatefulShellRoute.indexedStack(
@@ -59,12 +28,13 @@ final router = GoRouter(
       },
       parentNavigatorKey: rootNavigatorKey,
       branches: [
-        /// Home branch
+        /// Home branch with package routes integration
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: AppRoute.home.path,
-              builder: (context, state) => const HomeScreen(),
+              path: const HomeScreenRouteData().location,
+              builder: (context, state) =>
+                  const HomeScreenRouteData().build(context, state),
               routes: [
                 ...getCartRoutes(rootNavigatorKey),
                 ...getMenuRoutes(rootNavigatorKey),
@@ -73,12 +43,13 @@ final router = GoRouter(
           ],
         ),
 
-        /// Profile branch
+        /// Profile branch with package routes integration
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: AppRoute.profile.path,
-              builder: (context, state) => const ProfileScreen(),
+              path: const ProfileScreenRouteData().location,
+              builder: (context, state) =>
+                  const ProfileScreenRouteData().build(context, state),
               routes: [
                 ...getCartRoutes(rootNavigatorKey),
                 ...getMenuRoutes(rootNavigatorKey),
@@ -87,7 +58,7 @@ final router = GoRouter(
           ],
         ),
 
-        /// Settings branch with nested tabs
+        /// Settings branch with nested tabs using generated type-safe routes
         StatefulShellBranch(
           routes: [
             /// Nested StatefulShellRoute for settings tabs
@@ -96,101 +67,90 @@ final router = GoRouter(
                 return SettingsScreen(navigationShell: settingsNavigationShell);
               },
               branches: [
-                /// Account settings branch
+                /// Account settings branch using generated routes
                 StatefulShellBranch(
                   routes: [
                     GoRoute(
-                      path: AppRoute.settingsAccount.path,
+                      path: const AccountSettingsScreenRouteData().location,
                       builder: (context, state) =>
-                          const AccountSettingsScreen(),
+                          const AccountSettingsScreenRouteData()
+                              .build(context, state),
                       routes: [
                         GoRoute(
-                          path: AppRoute.settingsDetail.path,
+                          path: 'detail',
                           parentNavigatorKey: rootNavigatorKey,
-                          builder: (context, state) {
-                            final title =
-                                state.uri.queryParameters['title'] ?? 'Setting';
-                            return SettingsDetailScreen(
-                              title: title,
-                              settingType: 'account',
-                            );
-                          },
+                          builder: (context, state) =>
+                              const SettingsDetailScreenRouteData()
+                                  .build(context, state),
                         ),
-                        ...getCartRoutes(rootNavigatorKey),
+                        ...getMenuRoutes(rootNavigatorKey),
                       ],
                     ),
                   ],
                 ),
 
-                /// Notification settings branch
+                /// Notification settings branch using generated routes
                 StatefulShellBranch(
                   routes: [
                     GoRoute(
-                      path: AppRoute.settingsNotifications.path,
+                      path:
+                          const NotificationSettingsScreenRouteData().location,
                       builder: (context, state) =>
-                          const NotificationSettingsScreen(),
+                          const NotificationSettingsScreenRouteData()
+                              .build(context, state),
                       routes: [
                         GoRoute(
-                          path: AppRoute.settingsDetail.path,
+                          path: 'detail',
                           parentNavigatorKey: rootNavigatorKey,
-                          builder: (context, state) {
-                            final title =
-                                state.uri.queryParameters['title'] ?? 'Setting';
-                            return SettingsDetailScreen(
-                              title: title,
-                              settingType: 'notifications',
-                            );
-                          },
+                          builder: (context, state) =>
+                              const SettingsDetailScreenRouteData()
+                                  .build(context, state),
                         ),
+                        ...getMenuRoutes(rootNavigatorKey),
                       ],
                     ),
                   ],
                 ),
 
-                /// Security settings branch
+                /// Security settings branch using generated routes
                 StatefulShellBranch(
                   routes: [
                     GoRoute(
-                      path: AppRoute.settingsSecurity.path,
+                      path: const SecuritySettingsScreenRouteData().location,
                       builder: (context, state) =>
-                          const SecuritySettingsScreen(),
+                          const SecuritySettingsScreenRouteData()
+                              .build(context, state),
                       routes: [
                         GoRoute(
-                          path: AppRoute.settingsDetail.path,
+                          path: 'detail',
                           parentNavigatorKey: rootNavigatorKey,
-                          builder: (context, state) {
-                            final title =
-                                state.uri.queryParameters['title'] ?? 'Setting';
-                            return SettingsDetailScreen(
-                              title: title,
-                              settingType: 'security',
-                            );
-                          },
+                          builder: (context, state) =>
+                              const SettingsDetailScreenRouteData()
+                                  .build(context, state),
                         ),
+                        ...getMenuRoutes(rootNavigatorKey),
                       ],
                     ),
                   ],
                 ),
 
-                /// About settings branch
+                /// About settings branch using generated routes
                 StatefulShellBranch(
                   routes: [
                     GoRoute(
-                      path: AppRoute.settingsAbout.path,
-                      builder: (context, state) => const AboutSettingsScreen(),
+                      path: const AboutSettingsScreenRouteData().location,
+                      builder: (context, state) =>
+                          const AboutSettingsScreenRouteData()
+                              .build(context, state),
                       routes: [
                         GoRoute(
-                          path: AppRoute.settingsDetail.path,
+                          path: 'detail',
                           parentNavigatorKey: rootNavigatorKey,
-                          builder: (context, state) {
-                            final title =
-                                state.uri.queryParameters['title'] ?? 'Setting';
-                            return SettingsDetailScreen(
-                              title: title,
-                              settingType: 'about',
-                            );
-                          },
+                          builder: (context, state) =>
+                              const SettingsDetailScreenRouteData()
+                                  .build(context, state),
                         ),
+                        ...getMenuRoutes(rootNavigatorKey),
                       ],
                     ),
                   ],

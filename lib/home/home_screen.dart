@@ -2,7 +2,7 @@ import 'package:cart/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:menu/menu.dart';
-import '../router.dart';
+import '../routes/routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -32,7 +32,8 @@ class HomeScreen extends StatelessWidget {
 
             /// Navigate to menu modal using absolute path
             /// This opens a fullscreen modal dialog over the current tab
-            onPressed: () => context.go('/home/${MenuRoute.menuList.path}'),
+            onPressed: () =>
+                context.go('/home/${MenuListScreenRouteData().location}'),
           ),
         ],
       ),
@@ -56,33 +57,36 @@ class HomeScreen extends StatelessWidget {
 
                     /// Navigate to cart list using relative path from current location (/home)
                     /// Results in: /home/cart
-                    onTap: () => context.go('./${CartRoute.cartList.path}'),
+                    onTap: () =>
+                        context.go('./${CartListScreenRouteData().location}'),
                   ),
                   ListTile(
                     dense: true,
                     title: const Text('View Item 1'),
                     subtitle: const Text(
-                      'Goes to item 1 PDP keeping Cart PLP in navigation stack',
+                      'Go to item 1 PDP keeping Cart PLP in navigation stack',
                     ),
                     trailing: const Icon(Icons.arrow_forward),
 
                     /// Navigate through cart list to item detail using relative path
                     /// Results in: /home/cart/details/1 (keeps cart list in nav stack)
                     onTap: () => context.go(
-                      './${CartRoute.cartList.path}/${CartRoute.cartDetail.path}/1',
+                      './${CartDetailScreenFromListRouteData(id: '1').location}',
                     ),
                   ),
                   ListTile(
                     dense: true,
                     title: const Text('View Item 2'),
                     subtitle: const Text(
-                      'Go to item 2 PDP, without keeping Cart PLP in navigation stack',
+                      'Go to item 2 PDP without keeping Cart PLP in navigation stack',
                     ),
                     trailing: const Icon(Icons.arrow_forward),
 
-                    /// Navigate directly to item detail bypassing cart list
-                    /// Results in: /home/details/2 (no cart list in nav stack)
-                    onTap: () => context.go('./${CartRoute.cartDetail.path}/2'),
+                    /// Type-safe navigation directly to item detail bypassing cart list
+                    /// Results in: /details/2 (no cart list in nav stack)
+                    onTap: () => context.go(
+                      './${CartDetailScreenDirectRouteData(id: '2').location}',
+                    ),
                   ),
                 ],
               ),
@@ -102,16 +106,38 @@ class HomeScreen extends StatelessWidget {
                     title: const Text('View Menu'),
                     subtitle: const Text('Browse restaurant menu items'),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => context.go('/home/${MenuRoute.menuList.path}'),
+
+                    /// Type-safe navigation to menu
+                    onTap: () =>
+                        context.go('./${MenuListScreenRouteData().location}'),
                   ),
                   ListTile(
                     dense: true,
                     leading: const Icon(Icons.fastfood),
                     title: const Text('Menu Item 4'),
-                    subtitle: const Text('Go directly to menu item 4 details'),
+                    subtitle: const Text(
+                      'Go to menu item 4 PDP keeping Menu PLP in navigation stack',
+                    ),
                     trailing: const Icon(Icons.arrow_forward),
+
+                    /// Type-safe navigation to specific menu item
                     onTap: () => context.go(
-                        '/home/${MenuRoute.menuList.path}/${MenuRoute.menuDetail.path}/4'),
+                      './${MenuDetailScreenFromListRouteData(id: '4').location}',
+                    ),
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Icons.fastfood),
+                    title: const Text('Menu Item 5'),
+                    subtitle: const Text(
+                      'Go to Menu item 5 PDP without keeping Menu PLP in navigation stack',
+                    ),
+                    trailing: const Icon(Icons.arrow_forward),
+
+                    /// Type-safe navigation to specific menu item
+                    onTap: () => context.go(
+                      './${MenuDetailScreenDirectRouteData(id: '5').location}',
+                    ),
                   ),
                 ],
               ),
@@ -138,7 +164,10 @@ class HomeScreen extends StatelessWidget {
                     title: const Text('Account Settings'),
                     subtitle: const Text('Go directly to account tab'),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => context.go(AppRoute.settingsAccount.path),
+
+                    /// Type-safe navigation to settings account
+                    onTap: () =>
+                        context.go(AccountSettingsScreenRouteData().location),
                   ),
                   ListTile(
                     dense: true,
@@ -146,8 +175,10 @@ class HomeScreen extends StatelessWidget {
                     title: const Text('Notification Settings'),
                     subtitle: const Text('Go directly to notifications tab'),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () =>
-                        context.go(AppRoute.settingsNotifications.path),
+
+                    /// Type-safe navigation to settings notifications
+                    onTap: () => context
+                        .go(NotificationSettingsScreenRouteData().location),
                   ),
                   ListTile(
                     dense: true,
@@ -155,7 +186,10 @@ class HomeScreen extends StatelessWidget {
                     title: const Text('Security Settings'),
                     subtitle: const Text('Go directly to security tab'),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => context.go(AppRoute.settingsSecurity.path),
+
+                    /// Type-safe navigation to settings security
+                    onTap: () =>
+                        context.go(SecuritySettingsScreenRouteData().location),
                   ),
                   ListTile(
                     dense: true,
@@ -163,7 +197,10 @@ class HomeScreen extends StatelessWidget {
                     title: const Text('About'),
                     subtitle: const Text('Go directly to about tab'),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => context.go(AppRoute.settingsAbout.path),
+
+                    /// Type-safe navigation to settings about
+                    onTap: () =>
+                        context.go(AboutSettingsScreenRouteData().location),
                   ),
                 ],
               ),

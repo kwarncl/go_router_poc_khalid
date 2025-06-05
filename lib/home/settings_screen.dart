@@ -32,7 +32,11 @@ class SettingsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.restaurant_menu),
             tooltip: 'Menu',
-            onPressed: () => context.go('/home/${MenuRoute.menuList.path}'),
+
+            /// Navigate to menu modal using relative path from current settings tab
+            /// This opens a fullscreen modal dialog over the current tab
+            onPressed: () =>
+                context.go('./${MenuListScreenRouteData().location}'),
           ),
         ],
         bottom: PreferredSize(

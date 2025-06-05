@@ -1,8 +1,8 @@
 import 'package:cart/cart.dart';
 import 'package:flutter/material.dart';
+
 import '../../common/widgets/settings_section.dart';
 import '../../common/widgets/settings_tile.dart';
-import '../../common/widgets/cart_navigation_tile.dart';
 
 class AccountSettingsScreen extends StatelessWidget {
   const AccountSettingsScreen({super.key});
@@ -50,26 +50,27 @@ class AccountSettingsScreen extends StatelessWidget {
         SettingsSection(
           title: 'Cart Navigation Demo',
           children: [
-            CartNavigationTile(
+            SettingsTile(
               title: 'View Cart',
               subtitle: 'Go to cart items list',
               icon: Icons.shopping_cart,
-              route: './${CartRoute.cartList.path}',
+              onTap: () => const CartListScreenRouteData().go(context),
             ),
-            CartNavigationTile(
+            SettingsTile(
               title: 'View Item 1',
               subtitle:
                   'Goes to item 1 PDP keeping Cart PLP in navigation stack',
               icon: Icons.arrow_forward,
-              route:
-                  './${CartRoute.cartList.path}/${CartRoute.cartDetail.path}/1',
+              onTap: () =>
+                  const CartDetailScreenFromListRouteData(id: '1').go(context),
             ),
-            CartNavigationTile(
+            SettingsTile(
               title: 'View Item 2',
               subtitle:
                   'Go to item 2 PDP, without keeping Cart PLP in navigation stack',
               icon: Icons.arrow_forward,
-              route: './${CartRoute.cartDetail.path}/2',
+              onTap: () =>
+                  const CartDetailScreenDirectRouteData(id: '2').go(context),
             ),
           ],
         ),

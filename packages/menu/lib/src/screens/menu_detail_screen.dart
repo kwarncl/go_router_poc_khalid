@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:menu/menu.dart';
 import 'package:go_router/go_router.dart';
 
 class MenuDetailScreen extends StatelessWidget {
@@ -29,14 +28,6 @@ class MenuDetailScreen extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            /// Close the modal and return to the originating tab
-            onPressed: () => MenuRoute.returnToOriginatingTab(context),
-            icon: const Icon(Icons.close),
-            tooltip: 'Close',
-          ),
-        ],
       ),
       body: Center(
         child: Column(

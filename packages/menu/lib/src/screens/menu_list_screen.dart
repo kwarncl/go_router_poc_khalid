@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:menu/menu.dart';
 
 class MenuListScreen extends StatelessWidget {
   const MenuListScreen({super.key});
@@ -23,14 +22,6 @@ class MenuListScreen extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            /// Close the modal and return to the originating tab
-            onPressed: () => MenuRoute.returnToOriginatingTab(context),
-            icon: const Icon(Icons.close),
-            tooltip: 'Close',
-          ),
-        ],
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -101,7 +92,7 @@ class MenuListScreen extends StatelessWidget {
 
                 /// Dismiss modal and navigate to Settings tab using absolute path
                 /// This ensures clean navigation without path resolution issues
-                onTap: () => context.go('/settings'),
+                onTap: () => context.go('/settings/account'),
               ),
             );
           }

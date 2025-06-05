@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import '../router.dart';
+import '../routes/routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Navigate to home screen after delay
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
-        context.go(AppRoute.home.path);
+        const HomeScreenRouteData().go(context);
       }
     });
   }

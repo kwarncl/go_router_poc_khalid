@@ -28,7 +28,11 @@ class ProfileScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.restaurant_menu),
             tooltip: 'Menu',
-            onPressed: () => context.go('/profile/${MenuRoute.menuList.path}'),
+
+            /// Navigate to menu modal using absolute path
+            /// This opens a fullscreen modal dialog over the current tab
+            onPressed: () =>
+                context.go('/profile/${MenuListScreenRouteData().location}'),
           ),
         ],
       ),
@@ -43,25 +47,35 @@ class ProfileScreen extends StatelessWidget {
             title: const Text('View Cart'),
             subtitle: const Text('Go to cart items list'),
             trailing: const Icon(Icons.shopping_cart),
-            onTap: () => context.go('./${CartRoute.cartList.path}'),
+
+            /// Navigate to cart list using relative path from current location (/profile)
+            /// Results in: /profile/cart
+            onTap: () => context.go('./${CartListScreenRouteData().location}'),
           ),
           ListTile(
             title: const Text('View Item 1'),
             subtitle: const Text(
-              'Goes to item 1 PDP keeping Cart PLP in navigation stack',
+              'Go to item 1 PDP keeping Cart PLP in navigation stack',
             ),
             trailing: const Icon(Icons.arrow_forward),
+
+            /// Navigate through cart list to item detail using relative path
+            /// Results in: /profile/cart/details/1 (keeps cart list in nav stack)
             onTap: () => context.go(
-              './${CartRoute.cartList.path}/${CartRoute.cartDetail.path}/1',
+              './${CartDetailScreenFromListRouteData(id: '1').location}',
             ),
           ),
           ListTile(
             title: const Text('View Item 2'),
             subtitle: const Text(
-              'Go to item 2 PDP, without keeping Cart PLP in navigation stack',
+              'Go to item 2 PDP without keeping Cart PLP in navigation stack',
             ),
             trailing: const Icon(Icons.arrow_forward),
-            onTap: () => context.go('./${CartRoute.cartDetail.path}/2'),
+
+            /// Type-safe navigation to specific menu item
+            onTap: () => context.go(
+              './${CartDetailScreenDirectRouteData(id: '2').location}',
+            ),
           ),
         ],
       ),
